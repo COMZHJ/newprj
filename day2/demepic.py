@@ -1,7 +1,7 @@
 import numpy as np
 from PIL import Image
 
-im = Image.open('../pic/phone.jpg')
+im = Image.open('../data/phone.jpg')
 
 print(im, type(im))
 im = np.array(im)

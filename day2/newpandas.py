@@ -12,5 +12,3 @@ print('-'*100)
 print(df, type(df))
 print(df.index, df.columns)
 print(df.values, type(df.values))
-
-
