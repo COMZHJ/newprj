@@ -1,4 +1,3 @@
-import numpy as np
 import pandas as pd
 
 ss = pd.read_csv('../data/groupby.csv')
