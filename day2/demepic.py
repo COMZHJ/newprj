@@ -6,9 +6,9 @@ im = Image.open('../pic/phone.jpg')
 print(im, type(im))
 im = np.array(im)
 
-print(im, type(im), im.shape, im.dtype)
+print('原始矩阵', im, type(im), im.shape, im.dtype)
 im = [255, 255, 255] - im
-print(im, type(im), im.shape, im.dtype)
+print('新矩阵', im, type(im), im.shape, im.dtype)
 im = Image.fromarray(im.astype(np.uint8))
 
 im.save('../pic/phone2.jpg')
