@@ -68,5 +68,3 @@ plt.plot(x[:30], y_test[:30], color='#00ff00', marker='.', label='y_test')
 plt.plasma()
 plt.show()
 '''
-
-
