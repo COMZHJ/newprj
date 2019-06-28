@@ -16,7 +16,7 @@ from sklearn.model_selection import train_test_split
 训练特征值、测试特征值、训练目标值、测试目标值
 random_state=1,2,3,4,5,6......：固定训练集和测试级
 '''
-X_train, X_test, y_train, y_test = train_test_split(X, y_true, test_size=0.2, random_state=3)
+X_train, X_test, y_train, y_test = train_test_split(X, y_true, test_size=0.2, random_state=1)
 print(f'测试集数据\n{X_test}\n{y_test}')
 
 from sklearn.linear_model import LinearRegression
@@ -24,6 +24,7 @@ from sklearn.linear_model import LinearRegression
 lr = LinearRegression()
 # 有目标值的就是有监督的机器学习
 lr.fit(X_train, y_train)
+# 训练的过程就是在找权重
 print(f'获取模型训练的权重\n{lr.coef_}')
 # 通过测试集验证模型
 y_predict = lr.predict(X_test)
