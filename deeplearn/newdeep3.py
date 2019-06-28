@@ -41,12 +41,10 @@ train_op = tf.train.GradientDescentOptimizer(0.005).minimize(loss)
 
 with tf.Session() as sess:
     fw = tf.summary.FileWriter('../data/tftest/', sess.graph)
-
     sess.run(tf.global_variables_initializer())
     for i in range(1, 1001):
         sess.run(train_op)
         fw.add_summary(merge.eval(), i)
-
         if i % 10 == 0:
             # 获取Session的值，Session.run()，eval()
             # print(f'第{i}次均方误差为{loss.eval()}，权重为{w.eval()}，偏置为{b.eval()}')
