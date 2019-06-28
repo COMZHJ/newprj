@@ -34,7 +34,7 @@ print(X.shape, type(X))
 print(y.shape, type(y))
 # 特征工程
 # X = X.drop(['NOX', 'ZN'], axis=1)
-# 此处正确率低是由于欠拟合， 通过多项式对特征值
+# 此处正确率低是由于欠拟合， 通过多项式对特征值处理
 from sklearn.preprocessing import PolynomialFeatures
 pf = PolynomialFeatures(degree=2, interaction_only=True, include_bias=False)
 print(X.shape, type(X))
