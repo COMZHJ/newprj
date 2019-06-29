@@ -98,4 +98,3 @@ with tf.Session() as sess:
         plt.savefig('../data/deepdeep.jpg')
         plt.show()
 
-
