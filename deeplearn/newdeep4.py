@@ -50,7 +50,7 @@ with tf.Session() as sess:
     # image_list = mns.train.images[0:50]
     # result = sess.run(y_predict, feed_dict={X: image_list})
     # print(result)
-    for i in range(5):
+    for i in range(5000):
         # 如果依赖了占位符，则运算时必须指定“占位符”，不能eval()
         X_train, y_train = mns.train.next_batch(55)
         d = {X: X_train, y: y_train}
