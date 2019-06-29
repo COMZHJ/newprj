@@ -17,24 +17,40 @@ print(mns.train.next_batch(1))
 # 占位符
 X = tf.placeholder(dtype=tf.float32, shape=[None, 784])
 y = tf.placeholder(dtype=tf.float32, shape=[None, 10])
+# 添加隐藏层，让简单神经网络，变为深度神经网络
+# 假设第一层 500个神经元 [None, 784] * [784, 500] --> [None, 500]
+W1 = tf.Variable(initial_value=tf.random_normal(shape=[784, 500]), dtype=tf.float32)
+B1 = tf.Variable(initial_value=tf.random_normal(shape=[500]), dtype=tf.float32)
+# L1就是当前隐藏层的输出结果 [None, 784] * [784, 500] --> [None, 500]
+L1 = tf.add(tf.matmul(X, W1), B1)
+# 想要提高DNN命中率，应该在隐藏层的输出值后，再追加激活函数（多项式？？曲线？？）
+L1 = tf.nn.tanh(L1)
+
+# 假设第二层 300个神经元 [None, 500] * [500, 300] --> [None, 300]
+W2 = tf.Variable(initial_value=tf.random_normal(shape=[500, 300]), dtype=tf.float32)
+B2 = tf.Variable(initial_value=tf.random_normal(shape=[300]), dtype=tf.float32)
+# L2就是当前隐藏层的输出结果 [None, 500] * [500, 300] --> [None, 300]
+L2 = tf.add(tf.matmul(L1, W2), B2)
+# 想要提高DNN命中率，应该在隐藏层的输出值后，再追加激活函数（多项式？？曲线？？）
+L2 = tf.nn.tanh(L2)
 
 # 有多少个像素（特征值）就会有多少个特征
 # 有多少根连接线则有多少个权重 784 * 10
 # 训练的过程就是不断修改权重和偏置的过程
-# X[None,785] * [784, 10] --> [None, 10]
-weight = tf.Variable(initial_value=tf.random.normal(shape=[784, 10]), dtype=tf.float32)
+# X[None,300] * [300, 10] --> [None, 10]
+weight = tf.Variable(initial_value=tf.random.normal(shape=[300, 10]), dtype=tf.float32)
 # 偏置，有多少个神经元就会有多少个偏置
 bias = tf.Variable(initial_value=tf.random.normal(shape=[10]), dtype=tf.float32)
 # 根据公式 y_predice = X * w + b 生成预测值
-# [50,785] * [784, 10] + [10] --> [50, 10]
-y_predict = tf.add(tf.matmul(X, weight), bias)
+# [None,300] * [300, 10] --> [None, 10]
+y_predict = tf.add(tf.matmul(L2, weight), bias)
 # # 根据预测值和真实值的比较求误差（分类），只适合线性回归
 # loss = tf.reduce_mean(tf.square(y - y_predict), name='reduce_mean')
 # 而分类y_predict应该先转化为概率，再求误差
 loss = tf.reduce_mean(tf.nn.softmax_cross_entropy_with_logits(labels=y, logits=y_predict))
 
-# 采用梯度下降减少误差，步长为 1
-train_op = tf.train.GradientDescentOptimizer(1).minimize(loss)
+# 采用梯度下降减少误差
+train_op = tf.train.GradientDescentOptimizer(0.1).minimize(loss)
 # 结果转换为正确率
 a, b = tf.argmax(y_predict, axis=1), tf.argmax(y, axis=1)
 result = tf.equal(a, b)
