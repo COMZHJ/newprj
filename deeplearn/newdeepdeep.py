@@ -9,7 +9,7 @@ print(mns)
 
 print(mns.train.images.shape)
 print(mns.train.labels.shape)
-# 按序去除指定数量的数据
+# 按序取出指定数量的数据
 print(mns.train.next_batch(1))
 # print(mns.train.images[0])
 # print(mns.train.labels[0])
@@ -67,9 +67,35 @@ with tf.Session() as sess:
     # result = sess.run(y_predict, feed_dict={X: image_list})
     # print(result)
     for i in range(5000):
-        # 如果依赖了占位符，则运算时必须指定
+        # 如果依赖了占位符，则运算时必须指定“占位符”，不能eval()
         X_train, y_train = mns.train.next_batch(55)
         d = {X: X_train, y: y_train}
         sess.run(train_op, feed_dict=d)
         print(f'第{i}次的误差为{sess.run(loss, feed_dict=d)}，正确率为:{sess.run(result, feed_dict=d)}')
+    # for循环正常结束才会执行，且执行一次（for if try 没有局部变量）
+    else:
+        # 获取最后一次55个样本的预测值
+        guess = sess.run(y_predict, feed_dict=d)
+        image_label_predict = zip(X_train, y_train, guess)
+        # 准备画布的宽与高
+        import matplotlib.pyplot as plt
+        # 修改默认字体，否则会有中文乱码问题
+        plt.rcParams['font.sans-serif'] = ['SimHei']
+
+        plt.figure(figsize=[20, 18], dpi=200)
+        for index, (image, label, predict) in enumerate(image_label_predict, start=1):
+            plt.subplot(5, 11, index)
+            plt.imshow(image.reshape(28, 28), cmap=plt.cm.gray_r)
+
+            val_t = tf.argmax(label).eval()
+            val_p = tf.argmax(predict).eval()
+            if val_t != val_p:
+                col = '#ff0000'
+            else:
+                col = '#000000'
+            plt.title(f'真{val_t},预{val_p}', fontsize=20, color=col)
+
+        plt.savefig('../data/deepdeep.jpg')
+        plt.show()
+
 
