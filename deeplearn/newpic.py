@@ -3,10 +3,13 @@ import matplotlib.pyplot as plt
 from PIL import Image
 
 # 设置尺寸和分别率
-plt.figure(figsize=[50, 30], dpi=10)
+plt.figure(figsize=[30, 20], dpi=100)
 # 指定布局和当前图片显示再布局的位置
-plt.subplot(5, 11, 1)
-plt.imshow(Image.open('../data/phone.jpg'))
-plt.show()
+im = Image.open('../data/phone.jpg')
 
+for index in range(1, 56):
+    plt.subplot(5, 11, index)
+    plt.imshow(im)
+
+plt.show()
 

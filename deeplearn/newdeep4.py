@@ -41,6 +41,8 @@ result = tf.equal(a, b)
 result = tf.cast(result, dtype=tf.float32)
 result = tf.reduce_mean(result)
 
+# 创建一个Saver
+saver = tf.train.Saver()
 # 机器学习和深度学习都有“回归”和“分类”算法
 # 回归：预测值（一个样本一个预测值）与真实值的误差
 # 分类：输出的不是一个标准值，输出的是属于类别的概率（目标值必须是One-Hot编码）
@@ -66,7 +68,7 @@ with tf.Session() as sess:
         # 修改默认字体，否则会有中文乱码问题
         plt.rcParams['font.sans-serif'] = ['SimHei']
 
-        plt.figure(figsize=[20, 18], dpi=200)
+        plt.figure(figsize=[20, 15], dpi=200)
         for index, (image, label, predict) in enumerate(image_label_predict, start=1):
             plt.subplot(5, 11, index)
             plt.imshow(image.reshape(28, 28), cmap=plt.cm.gray_r)
@@ -81,4 +83,7 @@ with tf.Session() as sess:
 
         plt.savefig('../data/deep.jpg')
         plt.show()
+
+    # 保存训练集
+    saver.save(sess, '../data/temp/deeptest')
 
