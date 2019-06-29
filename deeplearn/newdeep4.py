@@ -1,7 +1,7 @@
 import tensorflow as tf
 from tensorflow.examples.tutorials.mnist import input_data
 
-mns = input_data.read_data_sets('../data/input_data', validation_size=0, one_hot=True)
+mns = input_data.read_data_sets('../data/input_data', one_hot=True)
 print(mns)
 
 print(mns.train.images.shape)
@@ -45,7 +45,7 @@ with tf.Session() as sess:
     # image_list = mns.train.images[0:50]
     # result = sess.run(y_predict, feed_dict={X: image_list})
     # print(result)
-    for i in range(1000):
+    for i in range(5000):
         # 如果依赖了占位符，则运算时必须指定
         X_train, y_train = mns.train.next_batch(55)
         d = {X: X_train, y: y_train}
