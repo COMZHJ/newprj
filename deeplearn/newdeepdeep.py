@@ -62,10 +62,6 @@ result = tf.reduce_mean(result)
 # 分类：输出的不是一个标准值，输出的是属于类别的概率（目标值必须是One-Hot编码）
 with tf.Session() as sess:
     sess.run(tf.global_variables_initializer())
-    # # 获取50张图 ==》 [50, 784]
-    # image_list = mns.train.images[0:50]
-    # result = sess.run(y_predict, feed_dict={X: image_list})
-    # print(result)
     for i in range(5000):
         # 如果依赖了占位符，则运算时必须指定“占位符”，不能eval()
         X_train, y_train = mns.train.next_batch(55)
