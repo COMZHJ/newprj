@@ -1,4 +1,4 @@
-import new2.newpy as d
+import new.newpy as d
 
 a = d.Father('哈哈')
 a.show()
