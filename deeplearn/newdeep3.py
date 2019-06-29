@@ -29,7 +29,7 @@ y_predict = tf.add(tf.multiply(tf.pow(X, 2), w2), y_predict)
 y_predict = tf.add(tf.multiply(tf.pow(X, 3), w3), y_predict, name='multiply_add')
 # y_predict = tf.add(tf.multiply(tf.pow(X, 4), w4), y_predict, name='multiply_add')
 
-# 获取均方误差
+# 获取均方误差（适合线性回归）
 loss = tf.reduce_mean(tf.square(y - y_predict), name='reduce_mean')
 # 可以把误差添加到图中
 tf.summary.scalar('abc', loss)
