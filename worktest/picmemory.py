@@ -109,6 +109,6 @@ with tf.Session() as sess:
     finally:
         coord.request_stop()
 
-    # 关闭队列
-    coord.join(threads)
+    # # 关闭队列
+    # coord.join(threads)
 

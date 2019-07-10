@@ -37,6 +37,7 @@ def load_sample(sample_dir, shuffleflag=True):
 data_dir = 'E:/Source/picrecord'
 # 载入文件名称与标签
 (filenames, labels), _ = load_sample(data_dir, shuffleflag=False)
+print(filenames, labels)
 
 record_path = '../data/mydata.tfrecords'
 
@@ -100,9 +101,10 @@ def read_and_decode(filenames, flag='train', batch_size=3):
 TFRecordfilenames = [record_path]
 # 以测试的方式打开数据集
 image, label = read_and_decode(TFRecordfilenames, flag='test')
+print(image, label)
 
 # 定义保存图片的路径
-saveimgpath = 'E:/Source/pic/show'
+saveimgpath = 'E:/Source/pic/show/'
 # 如果存在saveimgpath，则将其删除
 if tf.gfile.Exists(saveimgpath):
     tf.gfile.DeleteRecursively(saveimgpath)
@@ -112,13 +114,14 @@ tf.gfile.MakeDirs(saveimgpath)
 
 # 开始一个读取数据的会话
 with tf.Session() as sess:
-    init = tf.global_variables_initializer()
-    sess.run(init)  # 初始化本地变量，没有这句会报错
+    # 初始化本地变量，没有这句会报错
+    init = tf.local_variables_initializer()
+    sess.run(init)
 
     # 建立列队协调器（启动多线程）
     coord = tf.train.Coordinator()
     # 启动队列线程
-    threads = tf.train.start_queue_runners(coord=coord)
+    threads = tf.train.start_queue_runners(sess=sess, coord=coord)
     # 建立集合对象，用于存放子文件夹
     myset = set([])
 

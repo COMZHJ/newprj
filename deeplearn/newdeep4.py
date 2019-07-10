@@ -9,7 +9,7 @@ print(mns)
 
 print(mns.train.images.shape)
 print(mns.train.labels.shape)
-# 按序去除指定数量的数据
+# 按序取出指定数量的数据
 print(mns.train.next_batch(1))
 # print(mns.train.images[0])
 # print(mns.train.labels[0])
