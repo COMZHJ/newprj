@@ -32,4 +32,3 @@ with tf.Session() as sess: # Session 会自动关闭
     print(sess.run(e))
     # sess.close()
 
-

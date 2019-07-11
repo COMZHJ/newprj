@@ -46,7 +46,7 @@ def get_batches(image, label, resize_w, resize_h, channels, batch_size):
     image = tf.image.decode_bmp(image_c, channels)
 
     # 修改图片大小
-    image = tf.image.resize_image_with_crop_or_pad(image, resize_h, resize_w)
+    image = tf.image.resize_image_with_crop_or_pad(image, resize_w, resize_h)
     # 将图像进行标准化处理
     image = tf.image.per_image_standardization(image)
     # 生成批次数据
