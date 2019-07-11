@@ -111,7 +111,6 @@ if tf.gfile.Exists(saveimgpath):
 # 创建saveimgpath路径
 tf.gfile.MakeDirs(saveimgpath)
 
-
 # 开始一个读取数据的会话
 with tf.Session() as sess:
     # 初始化本地变量，没有这句会报错

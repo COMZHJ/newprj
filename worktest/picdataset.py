@@ -1,10 +1,9 @@
 import tensorflow as tf
 from skimage import transform
 import os
-from PIL import Image
 import numpy as np
 from sklearn.utils import shuffle
-from tqdm import tqdm
+from matplotlib import pyplot as plt
 
 
 def load_sample(sample_dir, shuffleflag=True):
@@ -32,13 +31,6 @@ def load_sample(sample_dir, shuffleflag=True):
         return shuffle(np.asarray(lfilenames), np.asarray(labels)), np.asarray(lab)
     else:
         return (np.asarray(lfilenames), np.asarray(labels)), np.asarray(lab)
-
-
-# 定义样本路径
-data_dir = 'E:/Source/picrecord'
-# 载入文件名称与标签
-(filenames, labels), _ = load_sample(data_dir, shuffleflag=False)
-print(filenames, labels)
 
 
 # 随机变换图像
@@ -97,7 +89,97 @@ def _random_rotated30(image, label):
     return image_decoded, label
 
 
+# 创建数据集
+def dataset(directory, size, batchsize, random_rotated=False):
+    # 载入文件名称与标签
+    (filenames, labels), _ = load_sample(directory, shuffleflag=False)
+    # 解析一个图片文件
+    def _parseone(filename, label):
+        # 读取并处理每张图片
+        image_string = tf.read_file(filename)
+        image_decoded = tf.image.decode_image(image_string)
+        # 对图片做扭曲变化
+        image_decoded.set_shape([None, None, None])
+        image_decoded = _distorted_image(image_decoded, size)
+        # 变化尺寸
+        image_decoded = tf.image.resize(image_decoded, size)
+        # 归一化
+        image_decoded = _norm_image(image_decoded, size)
+        image_decoded = tf.cast(image_decoded, dtype=tf.float32)
+        # 将label转为张量
+        label = tf.cast(tf.reshape(label, []), dtype=tf.int32)
+        return image_decoded, label
+
+    # 生成Dataset对象
+    dataset = tf.data.Dataset.from_tensor_slices((filenames, labels))
+    # 转化为图片数据集
+    dataset = dataset.map(_parseone)
+
+    if random_rotated == True:
+        dataset = dataset.map(_random_rotated30)
+    # 批次组合数据集
+    dataset = dataset.batch(batchsize)
+
+    return dataset
 
 
+# 显示单个图片
+def showresult(subplot, title, thisimg):
+    p = plt.subplot(subplot)
+    p.axis('off')
 
+    p.imshow(thisimg)
+    p.set_title(title)
+
+
+# 显示批次图片
+def showimg(index, label, img, ntop):
+    # 定义显示图片的宽和高
+    plt.figure(figsize=(20, 10))
+    plt.axis('off')
+    ntop = min(ntop, 9)
+
+    print(index)
+    for i in range(ntop):
+        showresult(100 + 10*ntop + 1 + i, label[i], img[i])
+    plt.show()
+
+
+def getone(dataset):
+    # 生成一个迭代器
+    iterator = dataset.make_one_shot_iterator()
+    # 从iterator里取出一个元素
+    one_element = iterator.get_next()
+    return one_element
+
+
+sample_dir = 'E:/Source/picrecord'
+size = [96, 96]
+batchsize = 10
+tdataset = dataset(sample_dir, size, batchsize)
+tdataset2 = dataset(sample_dir, size, batchsize, True)
+# 打印数据集的输出信息
+print(tdataset.output_types)
+print(tdataset.output_shapes)
+
+# 取出一个元素
+one_element = getone(tdataset)
+one_element2 = getone(tdataset2)
+
+with tf.Session() as sess:
+    init = tf.global_variables_initializer()
+    sess.run(init)  # 初始化
+
+    try:
+        for step in np.arange(1):
+            value = sess.run(one_element)
+            value2 = sess.run(one_element2)
+            # 显示图片
+            showimg(step, value[1], np.asarray(value[0]*255, np.uint8), 10)
+            showimg(step, value2[1], np.asarray(value2[0]*255, np.uint8), 10)
+            print(step)
+
+    # 捕获异常
+    except tf.errors.OutOfRangeError:
+        print('Done!!!')
 

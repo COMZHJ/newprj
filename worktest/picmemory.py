@@ -76,7 +76,7 @@ def showresult(subplot, title, thisimg):
 def showimg(index, label, img, ntop):
     # 定义显示图片的宽和高
     plt.figure(figsize=(20, 10))
-    p.axis('off')
+    plt.axis('off')
     ntop = min(ntop, 9)
 
     print(index)
@@ -109,6 +109,6 @@ with tf.Session() as sess:
     finally:
         coord.request_stop()
 
-    # # 关闭队列
-    # coord.join(threads)
+    # 关闭队列
+    coord.join(threads)
 
