@@ -174,7 +174,7 @@ with tf.Session() as sess:
         for step in np.arange(1):
             value = sess.run(one_element)
             value2 = sess.run(one_element2)
-            # 显示图片
+            # 显示图片（逆向归一化）
             showimg(step, value[1], np.asarray(value[0]*255, np.uint8), 10)
             showimg(step, value2[1], np.asarray(value2[0]*255, np.uint8), 10)
             print(step)

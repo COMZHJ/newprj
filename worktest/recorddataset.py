@@ -85,7 +85,7 @@ with tf.Session() as sess:
     try:
         for step in np.arange(1):
             value = sess.run(one_element)
-            # 显示图片
+            # 显示图片（逆向归一化）
             showimg(step, value[1], np.asarray((value[0]+0.5)*255, np.uint8), 10)
             print(step)
 
